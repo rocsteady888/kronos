@@ -30,20 +30,33 @@
       <br><br>
       <h1 class="header center orange-text">Time Keeping App</h1>
       <br><br>
-      <div class="row center">
-        <a href="http://materializecss.com/getting-started.html" id="download-button" class="btn-large waves-effect waves-light orange">Clock In (24)</a>
-      </div>
-      <br><br>
-      <div class="row center">
-        <a href="http://materializecss.com/getting-started.html" id="download-button" class="btn-large waves-effect waves-light orange">Clock In (12)</a>
-      </div>
-      <br><br>
-      <div class="row center">
-        <a href="http://materializecss.com/getting-started.html" id="download-button" class="btn-large waves-effect waves-light orange">Clock Out</a>
-      </div>
-      <br><br>
 
+      <div class="row">
+      <div class="col s4">
+        <div class="row">
+          <a class="btn-large waves-effect waves-light orange" id="clockInTwentyFour">Clock In (24)</a>
+        </div>
+        <br><br>
+        <div class="row">
+          <a class="btn-large waves-effect waves-light orange" id="clockOutTwentyFour">Clock Out (24)</a>
+        </div>
+        <br><br>
+        <div class="row">
+        <a class="btn-large waves-effect waves-light orange" id="clockInTwelve">Clock In (12)</a>
+        </div>
+        <br><br>
+        <div class="row">
+          <a class="btn-large waves-effect waves-light orange" id="clockOutTwelve">Clock Out (12)</a>
+        </div>
+        <br><br>
+      </div>
+      <div class="col s8">
+        <h3 id="timeStamp"></h3>
+        <table style="width:100%" id="timeCard">
+        </table>
+      </div>
     </div>
+  </div>
   </div>
 
 
@@ -123,6 +136,8 @@
 
   <!--  Scripts-->
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="js/moment.js"></script>
+  <script src="js/scripts.js"></script>
   <script src="js/materialize.js"></script>
   <script src="js/init.js"></script>
 
