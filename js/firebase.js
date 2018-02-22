@@ -27,6 +27,7 @@
   let dateOut;
   let timeOut;
   let startTime;
+  let totalHours = [];
 
   //Add Login
   btnLogIn.addEventListener('click', e => {
@@ -64,50 +65,56 @@
     }
   });
 
-  //Sync object changes
-  dbRefObject.on('value', snap => {
-    console.log(preObject.innerText = JSON.stringify(snap.val(), null, 3));
-  });
-
-  document.getElementById(`clockInTwentyFour`).addEventListener(`click`, clockInLong);
-  function clockInLong() {
+  clockInTwentyFour.addEventListener('click', e => {
     let currentDate = moment().format('MMMM Do YYYY');
     let currentTime = moment().format('h:mm:ss a');
     let endHour = moment().endOf('day').format('h:mm:ss a');
+    let duration = moment
+            .duration(moment(endHour, 'h:mm:ss a')
+            .diff(moment(currentTime, 'h:mm:ss a'))
+            ).asHours();
     dbRefObject.push({
         date: currentDate,
         clockin: currentTime,
-        endHour: endHour
+        endHour: endHour,
+        duration: duration
     });
-  }
+  });
 
-  document.getElementById(`clockOutTwentyFour`).addEventListener(`click`, clockOutLong);
-  function clockOutLong() {
+  clockOutTwentyFour.addEventListener('click', e => {
     let currentDate = moment().format('MMMM Do YYYY');
     let currentTime = moment().format('h:mm:ss a');
     let startHour = moment().startOf('day').format('h:mm:ss a');
+    let duration = moment
+            .duration(moment(currentTime, 'h:mm:ss a')
+            .diff(moment(startHour, 'h:mm:ss a'))
+            ).asHours();
     dbRefObject.push({
         date: currentDate,
         clockout: currentTime,
-        startHour: startHour
+        startHour: startHour,
+        duration: duration
+    // promise.catch(e => console.log(e.message));
     });
-  }
-
+  });
 
 dbRefObject.orderByChild("dateAdded")
      .on("child_added", function(snapshot) {
         // storing the snapshot.val() in a variable for convenience
         const sv = snapshot.val();
 
-        // Console.loging the last trains's data
+        // Console.loging the last time stamps's data
         console.log(sv);
 
         // Change the HTML to reflect
-        dateIn=sv.date;
+        dateOf=sv.date;
         timeIn=sv.clockin;
         endTime=sv.endHour;
-
-        // function call to display current train details
+        startHour=sv.startHour;
+        timeOut=sv.clockout;
+        duration=parseFloat(sv.duration).toFixed(1);
+        totalHours.push(duration);
+        // function call to display current time stamp details
         createTable();
 
         // Handle the errorss
@@ -118,13 +125,32 @@ dbRefObject.orderByChild("dateAdded")
 function createTable(){
 
 	let dateTR = $("<tr>");
+	let dateTD =$("<td>").text(dateOf);
 	let clockInTD =$("<td>").text(timeIn);
-	let endTimeTd =$("<td>").text(endTime);
+	let endTimeTD =$("<td>").text(endTime);
+	let startHourTD =$("<td>").text(startHour);
+	let clockOutTD =$("<td>").text(timeOut);
+	let durationTD =$("<td>").text(duration);
+  let hours = 0;
+  for (var i = 0; i < totalHours.length; i++) {
+    console.log("hours:" + hours);
+    hours = hours + parseFloat(totalHours[i]);
+  }
+  let totalHoursTD =$("<td>").text(hours.toFixed(1));
 
-	dateTR.append(clockInTD,endTimeTd);
+	dateTR.append(dateTD,clockInTD,endTimeTD,startHourTD,clockOutTD,durationTD,totalHoursTD);
 
 	$("#object").append(dateTR);
 }
+
+//Add Login
+object.addEventListener('click', e => {
+
+})
+
+
+
+
 
 
 
