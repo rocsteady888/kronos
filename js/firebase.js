@@ -12,7 +12,6 @@
   //Real-time elements
   const preObject = document.getElementById('object');
   const dbRefObject = firebase.database().ref().child('time stamp');
-
   // Get Elements
   const txtEmail = document.getElementById('txtEmail');
   const txtPassword = document.getElementById('txtPassword');
@@ -94,7 +93,6 @@
         clockout: currentTime,
         startHour: startHour,
         duration: duration
-    // promise.catch(e => console.log(e.message));
     });
   });
 
@@ -132,9 +130,8 @@ function createTable(){
 	let clockOutTD =$("<td>").text(timeOut);
 	let durationTD =$("<td>").text(duration);
   let hours = 0;
-  for (var i = 0; i < totalHours.length; i++) {
-    console.log("hours:" + hours);
-    hours = hours + parseFloat(totalHours[i]);
+  for (let i = 0; i < totalHours.length; i++) {
+    hours += parseFloat(totalHours[i]);
   }
   let totalHoursTD =$("<td>").text(hours.toFixed(1));
 
@@ -143,10 +140,16 @@ function createTable(){
 	$("#object").append(dateTR);
 }
 
-//Add Login
-object.addEventListener('click', e => {
+dbRefObject.on('child_added', snap => {
+  const timeCard = document.getElementById('timeCard');
+  const tr = document.createElement('tr');
+  const td = document.createElement('td');
+  td.innertext = snap.val();
+  td.id = snap.key;
+  tr.appendChild(td);
+  timeCard.appendChild(tr);
+});
 
-})
 
 
 
