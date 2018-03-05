@@ -116,7 +116,7 @@ dbRefObject.orderByChild("dateAdded")
         createTable();
 
         // Handle the errorss
-}, function(errorObject) {
+      }, function(errorObject) {
        console.log("Errors handled: " + errorObject.code);
 });
 
@@ -137,7 +137,7 @@ function createTable(){
 
 	dateTR.append(dateTD,clockInTD,endTimeTD,startHourTD,clockOutTD,durationTD,totalHoursTD);
 
-	$("#object").append(dateTR);
+	$("#timeCard").append(dateTR);
 }
 
 dbRefObject.on('child_added', snap => {
