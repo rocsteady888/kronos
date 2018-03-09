@@ -20,6 +20,7 @@
   const btnLogIn = document.getElementById('btnLogIn');
   const btnRegister = document.getElementById('btnRegister');
   const btnLogOut = document.getElementById('btnLogOut');
+  const tableRowBtn = document.getElementsByClassName('tableRow');
   let dateIn;
   let timeIn;
   let endTime;
@@ -71,11 +72,11 @@
     let duration = moment
             .duration(moment(endHour, 'h:mm:ss a')
             .diff(moment(currentTime, 'h:mm:ss a'))
-            ).asHours();
+          ).asHours().toFixed(1);
     dbRefObject.push({
         date: currentDate,
         clockin: currentTime,
-        endHour: endHour,
+        clockout: endHour,
         duration: duration
     });
   });
@@ -87,11 +88,11 @@
     let duration = moment
             .duration(moment(currentTime, 'h:mm:ss a')
             .diff(moment(startHour, 'h:mm:ss a'))
-            ).asHours();
+          ).asHours().toFixed(1);
     dbRefObject.push({
         date: currentDate,
+        clockin: startHour,
         clockout: currentTime,
-        startHour: startHour,
         duration: duration
     });
   });
@@ -102,19 +103,17 @@ dbRefObject.orderByChild("dateAdded")
         const sv = snapshot.val();
 
         // Console.loging the last time stamps's data
-        console.log(sv);
 
         // Change the HTML to reflect
+        id = snapshot.key;
         dateOf=sv.date;
         timeIn=sv.clockin;
-        endTime=sv.endHour;
-        startHour=sv.startHour;
         timeOut=sv.clockout;
         duration=parseFloat(sv.duration).toFixed(1);
         totalHours.push(duration);
         // function call to display current time stamp details
         createTable();
-
+        console.log(JSON.stringify(sv, null, 3));
         // Handle the errorss
       }, function(errorObject) {
        console.log("Errors handled: " + errorObject.code);
@@ -122,11 +121,10 @@ dbRefObject.orderByChild("dateAdded")
 
 function createTable(){
 
-	let dateTR = $("<tr>");
+	let dateTR = $("<tr class='tableRow'>");
+  dateTR.attr('id', id);
 	let dateTD =$("<td>").text(dateOf);
 	let clockInTD =$("<td>").text(timeIn);
-	let endTimeTD =$("<td>").text(endTime);
-	let startHourTD =$("<td>").text(startHour);
 	let clockOutTD =$("<td>").text(timeOut);
 	let durationTD =$("<td>").text(duration);
   let hours = 0;
@@ -135,20 +133,26 @@ function createTable(){
   }
   let totalHoursTD =$("<td>").text(hours.toFixed(1));
 
-	dateTR.append(dateTD,clockInTD,endTimeTD,startHourTD,clockOutTD,durationTD,totalHoursTD);
+	dateTR.append(dateTD,clockInTD,clockOutTD,durationTD,totalHoursTD);
 
 	$("#timeCard").append(dateTR);
 }
 
-dbRefObject.on('child_added', snap => {
-  const timeCard = document.getElementById('timeCard');
-  const tr = document.createElement('tr');
-  const td = document.createElement('td');
-  td.innertext = snap.val();
-  td.id = snap.key;
-  tr.appendChild(td);
-  timeCard.appendChild(tr);
-});
+tableRowBtn.addEventListener('click', e => {
+  //get email and password
+
+    console.log(this);
+})
+
+// dbRefObject.on('child_added', snap => {
+//   const timeCard = document.getElementById('timeCard');
+//   const tr = document.createElement('tr');
+//   const td = document.createElement('td');
+//   td.innertext = snap.val();
+//   td.id = snap.key;
+//   tr.appendChild(td);
+//   timeCard.appendChild(tr);
+// });
 
 
 
