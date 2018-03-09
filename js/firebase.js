@@ -75,7 +75,7 @@
     dbRefObject.push({
         date: currentDate,
         clockin: currentTime,
-        endHour: endHour,
+        clockout: endHour,
         duration: duration
     });
   });
@@ -83,7 +83,7 @@
   clockOutTwentyFour.addEventListener('click', e => {
     let currentDate = moment().format('MMMM Do YYYY');
     let currentTime = moment().format('h:mm:ss a');
-    let startHour = moment().startOf('day').format('h:mm:ss a');
+    let clockin = moment().startOf('day').format('h:mm:ss a');
     let duration = moment
             .duration(moment(currentTime, 'h:mm:ss a')
             .diff(moment(startHour, 'h:mm:ss a'))
@@ -91,7 +91,7 @@
     dbRefObject.push({
         date: currentDate,
         clockout: currentTime,
-        startHour: startHour,
+        clockin: startHour,
         duration: duration
     });
   });
@@ -107,8 +107,6 @@ dbRefObject.orderByChild("dateAdded")
         // Change the HTML to reflect
         dateOf=sv.date;
         timeIn=sv.clockin;
-        endTime=sv.endHour;
-        startHour=sv.startHour;
         timeOut=sv.clockout;
         duration=parseFloat(sv.duration).toFixed(1);
         totalHours.push(duration);
@@ -125,8 +123,6 @@ function createTable(){
 	let dateTR = $("<tr>");
 	let dateTD =$("<td>").text(dateOf);
 	let clockInTD =$("<td>").text(timeIn);
-	let endTimeTD =$("<td>").text(endTime);
-	let startHourTD =$("<td>").text(startHour);
 	let clockOutTD =$("<td>").text(timeOut);
 	let durationTD =$("<td>").text(duration);
   let hours = 0;
@@ -135,20 +131,20 @@ function createTable(){
   }
   let totalHoursTD =$("<td>").text(hours.toFixed(1));
 
-	dateTR.append(dateTD,clockInTD,endTimeTD,startHourTD,clockOutTD,durationTD,totalHoursTD);
+	dateTR.append(dateTD,clockInTD,clockOutTD,durationTD,totalHoursTD);
 
 	$("#timeCard").append(dateTR);
 }
-
-dbRefObject.on('child_added', snap => {
-  const timeCard = document.getElementById('timeCard');
-  const tr = document.createElement('tr');
-  const td = document.createElement('td');
-  td.innertext = snap.val();
-  td.id = snap.key;
-  tr.appendChild(td);
-  timeCard.appendChild(tr);
-});
+// 
+// dbRefObject.on('child_added', snap => {
+//   const timeCard = document.getElementById('timeCard');
+//   const tr = document.createElement('tr');
+//   const td = document.createElement('td');
+//   td.innertext = snap.val();
+//   td.id = snap.key;
+//   tr.appendChild(td);
+//   timeCard.appendChild(tr);
+// });
 
 
 
