@@ -17,11 +17,11 @@
 table {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
-    width: 75%;
+    width: 60%;
 }
 
 table td, table th {
-    border: 1px solid black;
+    border: 1px solid #ddd;
     padding: 8px;
 }
 
