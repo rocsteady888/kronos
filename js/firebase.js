@@ -76,7 +76,7 @@
     dbRefObject.push({
         date: currentDate,
         clockin: currentTime,
-        clockout: endHour,
+        clockout: clockout,
         duration: duration
     });
   });
@@ -91,7 +91,7 @@
           ).asHours().toFixed(1);
     dbRefObject.push({
         date: currentDate,
-        clockin: startHour,
+        clockin: clockin,
         clockout: currentTime,
         duration: duration
     });
