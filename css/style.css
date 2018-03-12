@@ -14,10 +14,14 @@
 	font-size: inherit;
 }
 
+.call-btns {
+  width: 100%;
+}
+
 table {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
-    width: 60%;
+    width: 100%;
 }
 
 table td, table th {
