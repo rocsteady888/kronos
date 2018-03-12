@@ -41,6 +41,6 @@ table th {
     color: white;
 }
 
-call-btns a {
-  width: 100%;
+.btn-large {
+  width: 65%;
 }
