@@ -68,9 +68,9 @@
   clockInTwentyFour.addEventListener('click', e => {
     let currentDate = moment().format('MMMM Do YYYY');
     let currentTime = moment().format('h:mm:ss a');
-    let endHour = moment().endOf('day').format('h:mm:ss a');
+    let clockout = moment().endOf('day').format('h:mm:ss a');
     let duration = moment
-            .duration(moment(endHour, 'h:mm:ss a')
+            .duration(moment(clockout, 'h:mm:ss a')
             .diff(moment(currentTime, 'h:mm:ss a'))
           ).asHours().toFixed(1);
     dbRefObject.push({
@@ -87,7 +87,7 @@
     let clockin = moment().startOf('day').format('h:mm:ss a');
     let duration = moment
             .duration(moment(currentTime, 'h:mm:ss a')
-            .diff(moment(startHour, 'h:mm:ss a'))
+            .diff(moment(clockin, 'h:mm:ss a'))
           ).asHours().toFixed(1);
     dbRefObject.push({
         date: currentDate,
