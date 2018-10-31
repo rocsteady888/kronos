@@ -6,15 +6,15 @@
   <title>Kronos</title>
 
   <!-- CSS  -->
+   <!-- Compiled and minified CSS -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
+   <!-- Compiled and minified JavaScript -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <!--Import Google Icon Font-->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <!--Import materialize.css-->
-  <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
-
   <!--Let browser know website is optimized for mobile-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <!-- FIREBASE -->
   <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
   <script src="https://cdn.firebase.com/libs/firebaseui/2.6.1/firebaseui.js"></script>
@@ -55,9 +55,10 @@
           <br><br>
             <a class="btn-large waves-effect waves-light red tooltipped" data-position="bottom" data-delay="50" data-tooltip="Only places the call, does not add a time stamp!" href="tel:+19192452001,10606#,,,4182#,,,,,1" id="teletime">Call Teletime</a>
           <br><br>
+          <input type="text" class="datepicker">
           <a class="btn-large waves-effect waves-light purple" id="timeCardQuery">Time Card</a>
           <br><br>
-          <a class="btn-large waves-effect waves-light purple" id="allTimeQuery">Get All Times</a>
+          <!-- <a class="btn-large waves-effect waves-light purple" id="allTimeQuery">Get All Times</a> -->
           <br><br>
         </div>
         <div class="col s12 m9">
@@ -164,13 +165,11 @@
 
 
   <!--  Scripts-->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script src="js/modal.js"></script>
   <script src="js/moment.js"></script>
   <script src="js/firebase.js"></script>
   <script src="js/modal.js"></script>
   <script src="js/scripts.js"></script>
-  <script type="text/javascript" src="js/materialize.min.js"></script>
-  <script src="js/init.js"></script>
-
   </body>
 </html>

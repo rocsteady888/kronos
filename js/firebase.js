@@ -106,6 +106,8 @@
 
 
   timeCardQuery.addEventListener('click', e => {
+    //table reset
+    $("#timeCard").empty();
     let payPeriodStart = 1541002504848
     let query = dbRefObject.orderByChild('time').startAt(payPeriodStart);
     query.on('child_added', function(snapshot) {
@@ -175,7 +177,6 @@
   // });
 
   function createTable(){
-
     let dateTR = $("<tr class='tableRow'>");
     dateTR.attr('id', id);
     let dateTD =$("<td>").text(dateOf);
