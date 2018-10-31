@@ -12,6 +12,7 @@
   //Real-time elements
   const preObject = document.getElementById('object');
   const dbRefObject = firebase.database().ref().child('time stamp');
+  const dbTimeTableRefObject = firebase.database().ref().child('time stamp').orderByChild("dateAdded");
   // Get Elements
   const txtEmail = document.getElementById('txtEmail');
   const txtPassword = document.getElementById('txtPassword');
@@ -107,34 +108,71 @@
   timeCardQuery.addEventListener('click', e => {
     let payPeriodStart = 1541002504848
     let query = dbRefObject.orderByChild('time').startAt(payPeriodStart);
-    query.on('child_added', function(snap) {
-      let timeStampQuery = snap.val();
+    query.on('child_added', function(snapshot) {
+      let timeStampQuery = snapshot.val();
       console.log(timeStampQuery);
-      console.log(snap.key);
+      console.log(snapshot.key);
+      // storing the snapshot.val() in a variable for convenience
+      const sv = snapshot.val();
+
+      // Console.loging the last time stamps's data
+
+      // Change the HTML to reflect
+      id = snapshot.key;
+      dateOf=sv.date;
+      timeIn=sv.clockin;
+      timeOut=sv.clockout;
+      duration=parseFloat(sv.duration).toFixed(1);
+      totalHours.push(duration);
+      // function call to display current time stamp details
+      createTable();
+      // console.log(JSON.stringify(sv, null, 3));
+      // Handle the errorss
+    }, function(errorObject) {
+    console.log("Errors handled: " + errorObject.code);
+      function createTimeCard(){
+        let dateTR = $("<tr class='tableRow'>");
+        dateTR.attr('id', id);
+        let dateTD =$("<td>").text(dateOf);
+        let clockInTD =$("<td>").text(timeIn);
+        let clockOutTD =$("<td>").text(timeOut);
+        let durationTD =$("<td>").text(duration);
+        let hours = 0;
+        for (let i = 0; i < totalHours.length; i++) {
+          hours += parseFloat(totalHours[i]);
+        }
+        let totalHoursTD =$("<td>").text(hours.toFixed(1));
+        // let deleteTD =$("<a class='waves-effect waves-light btn red modal-trigger delete-btn' href='#modal2'>").text("Delete");
+        
+    
+        dateTR.append(dateTD,clockInTD,clockOutTD,durationTD,totalHoursTD);
+    
+        $("#timeCard").prepend(dateTR);
+      }
     });
   });
+  
 
-  dbRefObject.orderByChild("dateAdded")
-      .on("child_added", function(snapshot) {
-          // storing the snapshot.val() in a variable for convenience
-          const sv = snapshot.val();
+  // dbTimeTableRefObject.on("child_added", function(snapshot) {
+  //   // storing the snapshot.val() in a variable for convenience
+  //   const sv = snapshot.val();
 
-          // Console.loging the last time stamps's data
+  //   // Console.loging the last time stamps's data
 
-          // Change the HTML to reflect
-          id = snapshot.key;
-          dateOf=sv.date;
-          timeIn=sv.clockin;
-          timeOut=sv.clockout;
-          duration=parseFloat(sv.duration).toFixed(1);
-          totalHours.push(duration);
-          // function call to display current time stamp details
-          createTable();
-          // console.log(JSON.stringify(sv, null, 3));
-          // Handle the errorss
-        }, function(errorObject) {
-        console.log("Errors handled: " + errorObject.code);
-  });
+  //   // Change the HTML to reflect
+  //   id = snapshot.key;
+  //   dateOf=sv.date;
+  //   timeIn=sv.clockin;
+  //   timeOut=sv.clockout;
+  //   duration=parseFloat(sv.duration).toFixed(1);
+  //   totalHours.push(duration);
+  //   // function call to display current time stamp details
+  //   createTable();
+  //   // console.log(JSON.stringify(sv, null, 3));
+  //   // Handle the errorss
+  //   }, function(errorObject) {
+  //   console.log("Errors handled: " + errorObject.code);
+  // });
 
   function createTable(){
 
