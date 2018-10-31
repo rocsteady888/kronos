@@ -113,11 +113,15 @@ dbRefObject.orderByChild("dateAdded")
         totalHours.push(duration);
         // function call to display current time stamp details
         createTable();
-        console.log(JSON.stringify(sv, null, 3));
+        // console.log(JSON.stringify(sv, null, 3));
         // Handle the errorss
       }, function(errorObject) {
        console.log("Errors handled: " + errorObject.code);
 });
+
+function removeTimestamp(id){ 
+  dbRefObject.remove(id);
+}
 
 function createTable(){
 
@@ -132,35 +136,13 @@ function createTable(){
     hours += parseFloat(totalHours[i]);
   }
   let totalHoursTD =$("<td>").text(hours.toFixed(1));
+  // let deleteTD =$("<a class='waves-effect waves-light btn red modal-trigger delete-btn' href='#modal2'>").text("Delete");
+  
 
 	dateTR.append(dateTD,clockInTD,clockOutTD,durationTD,totalHoursTD);
 
-	$("#timeCard").append(dateTR);
+	$("#timeCard").prepend(dateTR);
 }
-//
-// dbRefObject.on('child_added', snap => {
-//   const timeCard = document.getElementById('timeCard');
-//   const tr = document.createElement('tr');
-//   const td = document.createElement('td');
-//   td.innertext = snap.val();
-//   td.id = snap.key;
-//   tr.appendChild(td);
-//   timeCard.appendChild(tr);
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
