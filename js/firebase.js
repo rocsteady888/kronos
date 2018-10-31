@@ -66,6 +66,8 @@
   });
 
   clockInTwentyFour.addEventListener('click', e => {
+    let d = new Date();
+    let n = d.getTime();
     let currentDate = moment().format('MMMM Do YYYY');
     let currentTime = moment().format('h:mm:ss a');
     let clockout = moment().endOf('day').format('h:mm:ss a');
@@ -74,14 +76,17 @@
             .diff(moment(currentTime, 'h:mm:ss a'))
           ).asHours().toFixed(1);
     dbRefObject.push({
-        date: currentDate,
-        clockin: currentTime,
-        clockout: clockout,
-        duration: duration
+      time: n,
+      date: currentDate,
+      clockin: currentTime,
+      clockout: clockout,
+      duration: duration
     });
   });
 
   clockOutTwentyFour.addEventListener('click', e => {
+    let d = new Date();
+    let n = d.getTime();
     let currentDate = moment().format('MMMM Do YYYY');
     let currentTime = moment().format('h:mm:ss a');
     let clockin = moment().startOf('day').format('h:mm:ss a');
@@ -90,59 +95,67 @@
             .diff(moment(clockin, 'h:mm:ss a'))
           ).asHours().toFixed(1);
     dbRefObject.push({
-        date: currentDate,
-        clockin: clockin,
-        clockout: currentTime,
-        duration: duration
+      time: n,
+      date: currentDate,
+      clockin: clockin,
+      clockout: currentTime,
+      duration: duration
     });
   });
 
-dbRefObject.orderByChild("dateAdded")
-     .on("child_added", function(snapshot) {
-        // storing the snapshot.val() in a variable for convenience
-        const sv = snapshot.val();
 
-        // Console.loging the last time stamps's data
+  timeCardQuery.addEventListener('click', e => {
+    let payPeriodStart = 1541002504848
+    let query = dbRefObject.orderByChild('time').startAt(payPeriodStart);
+    query.on('child_added', function(snap) {
+      let timeStampQuery = snap.val();
+      console.log(timeStampQuery);
+      console.log(snap.key);
+    });
+  });
 
-        // Change the HTML to reflect
-        id = snapshot.key;
-        dateOf=sv.date;
-        timeIn=sv.clockin;
-        timeOut=sv.clockout;
-        duration=parseFloat(sv.duration).toFixed(1);
-        totalHours.push(duration);
-        // function call to display current time stamp details
-        createTable();
-        // console.log(JSON.stringify(sv, null, 3));
-        // Handle the errorss
-      }, function(errorObject) {
-       console.log("Errors handled: " + errorObject.code);
-});
+  dbRefObject.orderByChild("dateAdded")
+      .on("child_added", function(snapshot) {
+          // storing the snapshot.val() in a variable for convenience
+          const sv = snapshot.val();
 
-function removeTimestamp(id){ 
-  dbRefObject.remove(id);
-}
+          // Console.loging the last time stamps's data
 
-function createTable(){
+          // Change the HTML to reflect
+          id = snapshot.key;
+          dateOf=sv.date;
+          timeIn=sv.clockin;
+          timeOut=sv.clockout;
+          duration=parseFloat(sv.duration).toFixed(1);
+          totalHours.push(duration);
+          // function call to display current time stamp details
+          createTable();
+          // console.log(JSON.stringify(sv, null, 3));
+          // Handle the errorss
+        }, function(errorObject) {
+        console.log("Errors handled: " + errorObject.code);
+  });
 
-	let dateTR = $("<tr class='tableRow'>");
-  dateTR.attr('id', id);
-	let dateTD =$("<td>").text(dateOf);
-	let clockInTD =$("<td>").text(timeIn);
-	let clockOutTD =$("<td>").text(timeOut);
-	let durationTD =$("<td>").text(duration);
-  let hours = 0;
-  for (let i = 0; i < totalHours.length; i++) {
-    hours += parseFloat(totalHours[i]);
+  function createTable(){
+
+    let dateTR = $("<tr class='tableRow'>");
+    dateTR.attr('id', id);
+    let dateTD =$("<td>").text(dateOf);
+    let clockInTD =$("<td>").text(timeIn);
+    let clockOutTD =$("<td>").text(timeOut);
+    let durationTD =$("<td>").text(duration);
+    let hours = 0;
+    for (let i = 0; i < totalHours.length; i++) {
+      hours += parseFloat(totalHours[i]);
+    }
+    let totalHoursTD =$("<td>").text(hours.toFixed(1));
+    // let deleteTD =$("<a class='waves-effect waves-light btn red modal-trigger delete-btn' href='#modal2'>").text("Delete");
+    
+
+    dateTR.append(dateTD,clockInTD,clockOutTD,durationTD,totalHoursTD);
+
+    $("#timeCard").prepend(dateTR);
   }
-  let totalHoursTD =$("<td>").text(hours.toFixed(1));
-  // let deleteTD =$("<a class='waves-effect waves-light btn red modal-trigger delete-btn' href='#modal2'>").text("Delete");
-  
-
-	dateTR.append(dateTD,clockInTD,clockOutTD,durationTD,totalHoursTD);
-
-	$("#timeCard").prepend(dateTR);
-}
 
 
 
