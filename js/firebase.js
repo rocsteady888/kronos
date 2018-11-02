@@ -114,12 +114,9 @@
     let payPeriodStart = Date.parse(searchDate);
     // 1209600000 is the number of milliseconds in 2 weeks
     let payPeriodEnd = payPeriodStart + 1209600000;
-    console.log(payPeriodStart);
     let query = dbRefObject.orderByChild('time').startAt(payPeriodStart).endAt(payPeriodEnd);
     query.on('child_added', function(snapshot) {
       let timeStampQuery = snapshot.val();
-      console.log(timeStampQuery);
-      console.log(snapshot.key);
       // storing the snapshot.val() in a variable for convenience
       const sv = snapshot.val();
 
