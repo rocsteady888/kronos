@@ -108,6 +108,8 @@
   timeCardQuery.addEventListener('click', e => {
     //table reset
     $("#timeCard").empty();
+    //reset the total hours for the duration column
+    totalHours = [];
     let searchDate = document.getElementById('searchDate').value;
     let payPeriodStart = Date.parse(searchDate);
     // 1209600000 is the number of milliseconds in 2 weeks
@@ -136,25 +138,6 @@
       // Handle the errorss
     }, function(errorObject) {
     console.log("Errors handled: " + errorObject.code);
-      function createTimeCard(){
-        let dateTR = $("<tr class='tableRow'>");
-        dateTR.attr('id', id);
-        let dateTD =$("<td>").text(dateOf);
-        let clockInTD =$("<td>").text(timeIn);
-        let clockOutTD =$("<td>").text(timeOut);
-        let durationTD =$("<td>").text(duration);
-        let hours = 0;
-        for (let i = 0; i < totalHours.length; i++) {
-          hours += parseFloat(totalHours[i]);
-        }
-        let totalHoursTD =$("<td>").text(hours.toFixed(1));
-        // let deleteTD =$("<a class='waves-effect waves-light btn red modal-trigger delete-btn' href='#modal2'>").text("Delete");
-        
-    
-        dateTR.append(dateTD,clockInTD,clockOutTD,durationTD,totalHoursTD);
-    
-        $("#timeCard").prepend(dateTR);
-      }
     });
   });
   
@@ -197,7 +180,7 @@
 
     dateTR.append(dateTD,clockInTD,clockOutTD,durationTD,totalHoursTD);
 
-    $("#timeCard").prepend(dateTR);
+    $("#timeCard").append(dateTR);
   }
 
 
