@@ -8,7 +8,7 @@
    messagingSenderId: "534939289411"
  };
  firebase.initializeApp(config);
-
+  
   //Real-time elements
   const preObject = document.getElementById('object');
   const dbRefObject = firebase.database().ref().child('time stamp');
@@ -108,8 +108,12 @@
   timeCardQuery.addEventListener('click', e => {
     //table reset
     $("#timeCard").empty();
-    let payPeriodStart = 1541002504848
-    let query = dbRefObject.orderByChild('time').startAt(payPeriodStart);
+    let searchDate = document.getElementById('searchDate').value;
+    let payPeriodStart = Date.parse(searchDate);
+    // 1209600000 is the number of milliseconds in 2 weeks
+    let payPeriodEnd = payPeriodStart + 1209600000;
+    console.log(payPeriodStart);
+    let query = dbRefObject.orderByChild('time').startAt(payPeriodStart).endAt(payPeriodEnd);
     query.on('child_added', function(snapshot) {
       let timeStampQuery = snapshot.val();
       console.log(timeStampQuery);
