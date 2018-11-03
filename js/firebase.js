@@ -39,7 +39,7 @@
     //sign in
     const promise = auth.signInWithEmailAndPassword(email, password);
     promise.catch(e => console.log(e.message));
-  })
+  });
 
   btnRegister.addEventListener('click', e => {
     //get email and password
@@ -53,7 +53,7 @@
 
   btnLogOut.addEventListener('click', e=> {
     firebase.auth().signOut();
-  })
+  });
 
   firebase.auth().onAuthStateChanged(firebaseUser => {
     if(firebaseUser){
@@ -209,7 +209,6 @@
       hours += parseFloat(totalHours[i]);
     }
     let totalHoursTD =$("<td>").text(hours.toFixed(1));
-    // let deleteTD =$("<a class='waves-effect waves-light btn red modal-trigger delete-btn' href='#modal2'>").text("Delete");
     dateTR.append(dateTD,clockInTD,clockOutTD,durationTD,totalHoursTD);
     $("#timeCard").append(dateTR);
   }
@@ -218,4 +217,4 @@
 
 
 
-    //fin
+//fin
