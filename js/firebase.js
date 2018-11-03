@@ -118,20 +118,35 @@
     });
   });
 
-  $(document).on('click','#clockOutTwelve',function(){
-    console.log('clicked');
-    // let d = new Date();
-    // let n = d.getTime();
-    // let currentDate = moment().format('MMMM Do YYYY');
-    // let currentTime = moment().format('h:mm:ss a');
-    // let clockin = '12hour';
-    // dbRefObject.child('time stamp').push({
-    //   time: n,
-    //   date: currentDate,
-    //   clockin: clockin,
-    //   clockout: currentTime,
-    //   duration: 0
-    // });
+  $(document).on('click','#clockOutTwelve',function(e){
+    let id = $(this).text();
+    let dateToUpdate = dbRefObject.child('time stamp/' + id);
+    let sv;
+    let clockin;
+    dateToUpdate.on('value', function(snapshot) {
+      sv = snapshot.val();
+      clockin = sv.clockin
+    });
+    
+    let d = new Date();
+    let n = d.getTime();
+    let currentDate = moment().format('MMMM Do YYYY');
+    let currentTime = moment().format('h:mm:ss a');
+    let duration = moment
+            .duration(moment(currentTime, 'h:mm:ss a')
+            .diff(moment(clockin, 'h:mm:ss a'))
+          ).asHours().toFixed(1);
+    let postData = {
+      clockin: sv.clockin,
+      clockout: currentTime,
+      date: currentDate,
+      duration: duration,
+      time: sv.time
+    };
+    var updates = {};
+    updates['/time stamp/' + id] = postData;
+  
+    return firebase.database().ref().update(updates);
   });
 
   timeCardQuery.addEventListener('click', e => {
