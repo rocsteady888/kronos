@@ -12,7 +12,7 @@
   //Real-time elements
   const preObject = document.getElementById('object');
   const dbRefObject = firebase.database().ref().child('time stamp');
-  const dbTimeTableRefObject = firebase.database().ref().child('time stamp').orderByChild("dateAdded");
+  const dbTimeTableRefObject = firebase.database().ref().child('time stamp').limitToLast(5).orderByChild("dateAdded");
   // Get Elements
   const txtEmail = document.getElementById('txtEmail');
   const txtPassword = document.getElementById('txtPassword');
@@ -104,61 +104,79 @@
     });
   });
 
+  clockInTwelve.addEventListener('click', e => {
+    let d = new Date();
+    let n = d.getTime();
+    let currentDate = moment().format('MMMM Do YYYY');
+    let currentTime = moment().format('h:mm:ss a');
+    let clockout = '12hour';
+    dbRefObject.push({
+      time: n,
+      date: currentDate,
+      clockin: currentTime,
+      clockout: clockout,
+      duration: 0
+    });
+  });
+
+  clockOutTwelve.addEventListener('click', e => {
+    let d = new Date();
+    let n = d.getTime();
+    let currentDate = moment().format('MMMM Do YYYY');
+    let currentTime = moment().format('h:mm:ss a');
+    let clockout = '12hour';
+    dbRefObject.push({
+      time: n,
+      date: currentDate,
+      clockin: currentTime,
+      clockout: clockout,
+      duration: 0
+    });
+  });
 
   timeCardQuery.addEventListener('click', e => {
-    //table reset
-    $("#timeCard").empty();
-    //reset the total hours for the duration column
-    totalHours = [];
     let searchDate = document.getElementById('searchDate').value;
-    let payPeriodStart = Date.parse(searchDate);
-    // 1209600000 is the number of milliseconds in 2 weeks
-    let payPeriodEnd = payPeriodStart + 1209600000;
-    let query = dbRefObject.orderByChild('time').startAt(payPeriodStart).endAt(payPeriodEnd);
-    query.on('child_added', function(snapshot) {
-      let timeStampQuery = snapshot.val();
-      // storing the snapshot.val() in a variable for convenience
-      const sv = snapshot.val();
-
-      // Console.loging the last time stamps's data
-
-      // Change the HTML to reflect
-      id = snapshot.key;
-      dateOf=sv.date;
-      timeIn=sv.clockin;
-      timeOut=sv.clockout;
-      duration=parseFloat(sv.duration).toFixed(1);
-      totalHours.push(duration);
-      // function call to display current time stamp details
-      createTable();
-      // console.log(JSON.stringify(sv, null, 3));
-      // Handle the errorss
-    }, function(errorObject) {
-    console.log("Errors handled: " + errorObject.code);
-    });
+    if (moment(searchDate).isValid() === true) {
+      //table reset
+      $("#timeCard").empty();
+      //reset the total hours for the duration column
+      totalHours = [];
+      let payPeriodStart = Date.parse(searchDate);
+      // 1209600000 is the number of milliseconds in 2 weeks
+      let payPeriodEnd = payPeriodStart + 1209600000;
+      let query = dbRefObject.orderByChild('time').startAt(payPeriodStart).endAt(payPeriodEnd);
+      query.on('child_added', function(snapshot) {
+        let timeStampQuery = snapshot.val();
+        const sv = snapshot.val();
+        id = snapshot.key;
+        dateOf=sv.date;
+        timeIn=sv.clockin;
+        timeOut=sv.clockout;
+        duration=parseFloat(sv.duration).toFixed(1);
+        totalHours.push(duration);
+        createTable();
+      }, function(errorObject) {
+      console.log("Errors handled: " + errorObject.code);
+      });
+    } else {
+      M.toast({html: 'Enter a valid date!'})
+    }
+    
   });
   
 
-  // dbTimeTableRefObject.on("child_added", function(snapshot) {
-  //   // storing the snapshot.val() in a variable for convenience
-  //   const sv = snapshot.val();
-
-  //   // Console.loging the last time stamps's data
-
-  //   // Change the HTML to reflect
-  //   id = snapshot.key;
-  //   dateOf=sv.date;
-  //   timeIn=sv.clockin;
-  //   timeOut=sv.clockout;
-  //   duration=parseFloat(sv.duration).toFixed(1);
-  //   totalHours.push(duration);
-  //   // function call to display current time stamp details
-  //   createTable();
-  //   // console.log(JSON.stringify(sv, null, 3));
-  //   // Handle the errorss
-  //   }, function(errorObject) {
-  //   console.log("Errors handled: " + errorObject.code);
-  // });
+  dbTimeTableRefObject.on("child_added", function(snapshot) {
+    const sv = snapshot.val();
+    id = snapshot.key;
+    dateOf=sv.date;
+    timeIn=sv.clockin;
+    timeOut=sv.clockout;
+    duration=parseFloat(sv.duration).toFixed(1);
+    totalHours.push(duration);
+    createTable();
+    }, function(errorObject) {
+    console.log("Errors handled: " + errorObject.code);
+  });
 
   function createTable(){
     let dateTR = $("<tr class='tableRow'>");
@@ -173,10 +191,7 @@
     }
     let totalHoursTD =$("<td>").text(hours.toFixed(1));
     // let deleteTD =$("<a class='waves-effect waves-light btn red modal-trigger delete-btn' href='#modal2'>").text("Delete");
-    
-
     dateTR.append(dateTD,clockInTD,clockOutTD,durationTD,totalHoursTD);
-
     $("#timeCard").append(dateTR);
   }
 
