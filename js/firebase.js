@@ -11,8 +11,7 @@
   
   //Real-time elements
   const preObject = document.getElementById('object');
-  const dbRefObject = firebase.database().ref().child('time stamp');
-  const dbTimeTableRefObject = firebase.database().ref().child('time stamp').limitToLast(5).orderByChild("dateAdded");
+  const dbRefObject = firebase.database().ref();
   // Get Elements
   const txtEmail = document.getElementById('txtEmail');
   const txtPassword = document.getElementById('txtPassword');
@@ -76,7 +75,7 @@
             .duration(moment(clockout, 'h:mm:ss a')
             .diff(moment(currentTime, 'h:mm:ss a'))
           ).asHours().toFixed(1);
-    dbRefObject.push({
+    dbRefObject.child('time stamp').push({
       time: n,
       date: currentDate,
       clockin: currentTime,
@@ -95,7 +94,7 @@
             .duration(moment(currentTime, 'h:mm:ss a')
             .diff(moment(clockin, 'h:mm:ss a'))
           ).asHours().toFixed(1);
-    dbRefObject.push({
+    dbRefObject.child('time stamp').push({
       time: n,
       date: currentDate,
       clockin: clockin,
@@ -110,7 +109,7 @@
     let currentDate = moment().format('MMMM Do YYYY');
     let currentTime = moment().format('h:mm:ss a');
     let clockout = '12hour';
-    dbRefObject.push({
+    dbRefObject.child('time stamp').push({
       time: n,
       date: currentDate,
       clockin: currentTime,
@@ -119,23 +118,25 @@
     });
   });
 
-  clockOutTwelve.addEventListener('click', e => {
-    let d = new Date();
-    let n = d.getTime();
-    let currentDate = moment().format('MMMM Do YYYY');
-    let currentTime = moment().format('h:mm:ss a');
-    let clockout = '12hour';
-    dbRefObject.push({
-      time: n,
-      date: currentDate,
-      clockin: currentTime,
-      clockout: clockout,
-      duration: 0
-    });
+  $(document).on('click','#clockOutTwelve',function(){
+    console.log('clicked');
+    // let d = new Date();
+    // let n = d.getTime();
+    // let currentDate = moment().format('MMMM Do YYYY');
+    // let currentTime = moment().format('h:mm:ss a');
+    // let clockin = '12hour';
+    // dbRefObject.child('time stamp').push({
+    //   time: n,
+    //   date: currentDate,
+    //   clockin: clockin,
+    //   clockout: currentTime,
+    //   duration: 0
+    // });
   });
 
   timeCardQuery.addEventListener('click', e => {
     let searchDate = document.getElementById('searchDate').value;
+    // Time card validation
     if (moment(searchDate).isValid() === true) {
       //table reset
       $("#timeCard").empty();
@@ -144,7 +145,7 @@
       let payPeriodStart = Date.parse(searchDate);
       // 1209600000 is the number of milliseconds in 2 weeks
       let payPeriodEnd = payPeriodStart + 1209600000;
-      let query = dbRefObject.orderByChild('time').startAt(payPeriodStart).endAt(payPeriodEnd);
+      let query = dbRefObject.child('time stamp').orderByChild('time').startAt(payPeriodStart).endAt(payPeriodEnd);
       query.on('child_added', function(snapshot) {
         let timeStampQuery = snapshot.val();
         const sv = snapshot.val();
@@ -161,11 +162,9 @@
     } else {
       M.toast({html: 'Enter a valid date!'})
     }
-    
   });
   
-
-  dbTimeTableRefObject.on("child_added", function(snapshot) {
+  dbRefObject.child('time stamp').limitToLast(5).orderByChild("dateAdded").on("child_added", function(snapshot) {
     const sv = snapshot.val();
     id = snapshot.key;
     dateOf=sv.date;
@@ -183,7 +182,12 @@
     dateTR.attr('id', id);
     let dateTD =$("<td>").text(dateOf);
     let clockInTD =$("<td>").text(timeIn);
-    let clockOutTD =$("<td>").text(timeOut);
+    let clockoutTD;
+    if ( timeOut === '12hour' ) {
+      clockOutTD = $("<a>").attr('href', 'tel:+19192452001,10606#,,4182#,,1').attr('class', 'btn-large waves-effect waves-light orange').attr('id', 'clockOutTwelve').attr('value', id).text(id);
+    } else {
+      clockOutTD = $("<td>").text(timeOut);
+    }
     let durationTD =$("<td>").text(duration);
     let hours = 0;
     for (let i = 0; i < totalHours.length; i++) {
