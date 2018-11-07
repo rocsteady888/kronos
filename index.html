@@ -53,8 +53,6 @@
           <br><br>
             <a href="tel:+19192452001,10606#,,4182#,,1" class="btn-large waves-effect waves-light orange" id="clockInTwelve">Clock In (12)</a>
           <br><br>
-            <a href="tel:+19192452001,10606#,,4182#,,1" class="btn-large waves-effect waves-light orange" id="clockOutTwelve">Clock Out (12)</a>
-          <br><br>
             <a class="btn-large waves-effect waves-light red lighten-1 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Only places the call, does not add a time stamp!" href="tel:+19192452001,10606#,,,4182#,,,,,1" id="teletime">Call Teletime</a>
           <br><br>
           <input type="text" class="datepicker" id="searchDate">
@@ -85,16 +83,16 @@
     </div>
   </div>
   <!-- Delete Button Structure -->
-  <!-- <div class="row">
+  <div class="row">
     <div id="modal2" class="modal">
       <div class="modal-content">
         <p>Are you sure you want to delete this?</p>
       </div>
       <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-red btn red">Delete</a>
+        <a href="#!" class="modal-close waves-effect waves-red btn delete-btn red" id="modal-delete-btn">Delete</a>
       </div>
     </div>
-  </div> -->
+  </div>
   <!-- Log In Modal Structure -->
   <div class="row">
     <div id="modal1" class="modal">
@@ -160,7 +158,7 @@
       </div>
       <div class="footer-copyright">
         <div class="container">
-        Made by <a class="orange-text text-lighten-3" href="http://materializecss.com">Ryan O'Connor</a>
+          Made by <a class="orange-text text-lighten-3" href="http://materializecss.com">Ryan O'Connor</a>
         </div>
       </div>
   </footer>

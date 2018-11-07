@@ -19,9 +19,13 @@
 }
 
 .btn-large {
-  width: 90%;
+  width: 100%;
 }
 
 .brand-logo {
   margin-left: 10px;
+}
+
+#delete-btn {
+  height: 52px;
 }

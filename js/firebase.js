@@ -119,7 +119,7 @@
   });
 
   $(document).on('click','#clockOutTwelve',function(e){
-    let id = $(this).text();
+    let id = $(this).data('id');
     let dateToUpdate = dbRefObject.child('time stamp/' + id);
     let sv;
     let clockin;
@@ -192,14 +192,44 @@
     console.log("Errors handled: " + errorObject.code);
   });
 
+  dbRefObject.child('time stamp').on("child_removed", function(snapshot) {
+    const sv = snapshot.val();
+    id = snapshot.key;
+    $("#" + id).remove();
+  });
+
+  dbRefObject.child('time stamp').on("child_changed", function(snapshot) {
+    const sv = snapshot.val();
+    id = snapshot.key;
+  });
+
+  $(document).on("click", "#delete-btn", function () {
+    let itemToDelete = $(this).data('id');
+    console.log(itemToDelete);
+    $("#modal-delete-btn").attr('data-id', itemToDelete);
+  });
+
+  $(document).on("click", "#modal-delete-btn", function () {
+    let itemToDelete = $(this).data('id');
+
+    console.log(itemToDelete);
+    dbRefObject.child('time stamp/' + itemToDelete).remove()
+      .then(function() {
+        console.log("Remove succeeded.")
+      })
+      .catch(function(error) {
+        console.log("Remove failed: " + error.message)
+      });
+  });
+
   function createTable(){
-    let dateTR = $("<tr class='tableRow'>");
+    let dateTR = $("<tr class='tableRow modal-trigger'>");
     dateTR.attr('id', id);
     let dateTD =$("<td>").text(dateOf);
     let clockInTD =$("<td>").text(timeIn);
     let clockoutTD;
     if ( timeOut === '12hour' ) {
-      clockOutTD = $("<a>").attr('href', 'tel:+19192452001,10606#,,4182#,,1').attr('class', 'btn-large waves-effect waves-light orange').attr('id', 'clockOutTwelve').attr('value', id).text(id);
+      clockOutTD = $("<a>").attr('href', 'tel:+19192452001,10606#,,4182#,,1').attr('class', 'btn-large waves-effect waves-light orange').attr('id', 'clockOutTwelve').attr('data-id', id).text("Clock Out");
     } else {
       clockOutTD = $("<td>").text(timeOut);
     }
@@ -209,7 +239,8 @@
       hours += parseFloat(totalHours[i]);
     }
     let totalHoursTD =$("<td>").text(hours.toFixed(1));
-    dateTR.append(dateTD,clockInTD,clockOutTD,durationTD,totalHoursTD);
+    let deleteTD =$("<button data-target='modal2' class='btn modal-trigger red' id='delete-btn'>").attr('data-id', id).text("Delete");
+    dateTR.append(dateTD,clockInTD,clockOutTD,durationTD,totalHoursTD,deleteTD);
     $("#timeCard").append(dateTR);
   }
 
