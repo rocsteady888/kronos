@@ -29,3 +29,13 @@
 #delete-btn {
   height: 52px;
 }
+
+.call-btns .btn-large {
+  margin: 10px 0;
+}
+
+@media only screen and (min-width: 990px) {
+  .container {
+    width: 85%;
+  }
+}

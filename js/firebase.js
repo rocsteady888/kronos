@@ -203,7 +203,7 @@
     id = snapshot.key;
   });
 
-  $(document).on("click", "#delete-btn", function () {
+  $(document).on("click", ".delete-btn", function () {
     let itemToDelete = $(this).data('id');
     console.log(itemToDelete);
     $("#modal-delete-btn").attr('data-id', itemToDelete);
@@ -223,8 +223,8 @@
   });
 
   function createTable(){
-    let dateTR = $("<tr class='tableRow modal-trigger'>");
-    dateTR.attr('id', id);
+    let dateTR = $("<tr class='tableRow modal-trigger delete-btn' data-target='modal2'>");
+    dateTR.attr('id', id).attr('data-id', id);
     let dateTD =$("<td>").text(dateOf);
     let clockInTD =$("<td>").text(timeIn);
     let clockoutTD;
@@ -239,8 +239,7 @@
       hours += parseFloat(totalHours[i]);
     }
     let totalHoursTD =$("<td>").text(hours.toFixed(1));
-    let deleteTD =$("<button data-target='modal2' class='btn modal-trigger red' id='delete-btn'>").attr('data-id', id).text("Delete");
-    dateTR.append(dateTD,clockInTD,clockOutTD,durationTD,totalHoursTD,deleteTD);
+    dateTR.append(dateTD,clockInTD,clockOutTD,durationTD,totalHoursTD);
     $("#timeCard").append(dateTR);
   }
 

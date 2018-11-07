@@ -19,70 +19,70 @@
   <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
   <script src="https://cdn.firebase.com/libs/firebaseui/2.6.1/firebaseui.js"></script>
   <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.6.1/firebaseui.css" />
+  <!-- custom styles -->
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-  <nav>
-      <div class="nav-wrapper blue">
-        <a href="#!" class="brand-logo">Kronos</a>
-        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-        <ul class="right hide-on-med-and-down">
-          <li><a class="modal-trigger" href="#modal1">Log In</a></li>
-          <li><a class="hide" id="btnLogOut">Log Out</a></li>
-          <li><a class="hide" id="btnRegister">Register</a></li>
-        </ul>
-      </div>
-    </nav>
-  
-    <ul class="sidenav" id="mobile-demo">
-      <li><a class="modal-trigger hide" href="#modal1">Log In</a></li>
-      <li><a class="hide" id="btnLogOut">Log Out</a></li>
-    </ul>
-            
-  <div class="section no-pad-bot" id="index-banner">
-    <div class="container">
-      <br><br>
-      <h2 class="header center orange-text">Time Keeping App</h2>
-      <br><br>
 
-      <div class="row">
-        <div class="col s12 m3 call-btns">
-            <a href="tel:+19192452001,10606#,,4182#,,1" class="btn-large waves-effect waves-light purple" id="clockInTwentyFour">Clock In (24)</a>
-          <br><br>
+<body>
+
+  <nav>
+    <div class="nav-wrapper blue">
+      <a href="#!" class="brand-logo">Kronos</a>
+      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+      <ul class="right hide-on-med-and-down">
+        <li><a class="modal-trigger" href="#modal1">Log In</a></li>
+        <li><a class="hide" id="btnLogOut">Log Out</a></li>
+        <li><a class="hide" id="btnRegister">Register</a></li>
+      </ul>
+    </div>
+  </nav>
+  
+  <ul class="sidenav" id="mobile-demo">
+    <li><a class="modal-trigger hide" href="#modal1">Log In</a></li>
+    <li><a class="hide" id="btnLogOut">Log Out</a></li>
+  </ul>
+  <div class="container">
+    <h2 class="header center orange-text">Time Keeping App</h2>
+    <div class="row">
+      <!-- Time Stamp Buttons -->
+      <div class="col s12 l3 call-btns">
+        <div class="row">
+          <div class="col s12 m6 l12">
+            <a href="tel:+19192452001,10606#,,4182#,,1" class="btn-large waves-effect waves-light purple" id="clockInTwentyFour">
+              Clock In (24)</a>
             <a href="tel:+19192452001,10606#,,4182#,,1" class="btn-large waves-effect waves-light purple" id="clockOutTwentyFour">Clock Out (24)</a>
-          <br><br>
             <a href="tel:+19192452001,10606#,,4182#,,1" class="btn-large waves-effect waves-light orange" id="clockInTwelve">Clock In (12)</a>
-          <br><br>
-            <a class="btn-large waves-effect waves-light red lighten-1 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Only places the call, does not add a time stamp!" href="tel:+19192452001,10606#,,,4182#,,,,,1" id="teletime">Call Teletime</a>
-          <br><br>
-          <input type="text" class="datepicker" id="searchDate">
-          <a class="btn-large waves-effect waves-light teal darken-1" id="timeCardQuery">Time Card</a>
-          <br><br>
-          <!-- <a class="btn-large waves-effect waves-light purple" id="allTimeQuery">Get All Times</a> -->
-          <br><br>
+          </div>
+          <div class="col s12 m6 l12">
+            <a class="btn-large waves-effect waves-light red lighten-1 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Only places the call, does not add a time stamp!"
+              href="tel:+19192452001,10606#,,,4182#,,,,,1" id="teletime">Call Teletime</a>
+            <input type="text" class="datepicker" id="searchDate">
+            <a class="btn-large waves-effect waves-light teal darken-1" id="timeCardQuery">Time Card</a>
+          </div>
         </div>
-        <div class="col s12 m9">
-          <h3 id="timeStamp"></h3>
-          <table class="table striped centered">
-             <thead>
-               <tr>
-                 <th>Date</th>
-                 <th>Clock In</th>
-                 <th>Clock Out</th>
-                 <th>Time Accrual</th>
-                 <th>Total Hours</th>
-               </tr>
-             </thead>
-             <tbody id="timeCard">
-               <div id="object"></div>
-             </tbody>
-           </table>
-          </table>
-        </div>
-      </div>
+      </div><!-- Time Stamp Buttons -->
+      <!-- Table -->
+      <div class="col s12 l9">
+        <h3 id="timeStamp"></h3>
+        <table class="table striped centered">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Clock In</th>
+              <th>Clock Out</th>
+              <th>Time Accrual</th>
+              <th>Total Hours</th>
+            </tr>
+          </thead>
+          <tbody id="timeCard">
+            <div id="object"></div>
+          </tbody>
+        </table>
+      </div><!-- Table -->
     </div>
   </div>
-  <!-- Delete Button Structure -->
+
+  <!-- Delete Modal Structure -->
   <div class="row">
     <div id="modal2" class="modal">
       <div class="modal-content">
@@ -118,50 +118,32 @@
     <div id="logInModal" class="modal">
       <div class="modal-content">
         <form class="col s12">
-        <div class="row">
-          <div class="input-field col s6">
-            <input placeholder="First Name" id="txtFirstName" type="text" class="validate">
-            <label for="first_name">First Name</label>
+          <div class="row">
+            <div class="input-field col s6">
+              <input placeholder="First Name" id="txtFirstName" type="text" class="validate">
+              <label for="first_name">First Name</label>
+            </div>
+            <div class="input-field col s6">
+              <input placeholder="Last Name" id="txtLastName" type="text" class="validate">
+              <label for="last_name">Last Name</label>
+            </div>
           </div>
-          <div class="input-field col s6">
-            <input placeholder="Last Name" id="txtLastName" type="text" class="validate">
-            <label for="last_name">Last Name</label>
+          <div class="row">
+            <div class="input-field col s12">
+              <input id="txtPassword" type="password" class="validate">
+              <label for="password">Password</label>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <input id="txtPassword" type="password" class="validate">
-            <label for="password">Password</label>
+          <div class="row">
+            <div class="input-field col s12">
+              <input id="txtEmail" type="email" class="validate">
+              <label for="email">Email</label>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <input id="txtEmail" type="email" class="validate">
-            <label for="email">Email</label>
-          </div>
-        </div>
-      </form>
+        </form>
       </div>
     </div>
   </div>
-      <br><br>
-      <br><br>
-
-    <footer class="page-footer orange">
-      <div class="container">
-        <div class="row">
-          <div class="col l6 s12">
-            <h5 class="white-text"></h5>
-            <p class="grey-text text-lighten-4"></p>
-          </div>
-        </div>
-      </div>
-      <div class="footer-copyright">
-        <div class="container">
-          Made by <a class="orange-text text-lighten-3" href="http://materializecss.com">Ryan O'Connor</a>
-        </div>
-      </div>
-  </footer>
 
 
   <!--  Scripts-->
