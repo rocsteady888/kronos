@@ -34,10 +34,14 @@
   margin: 10px 0;
 }
 
-tbody tr:hover {
+tbody .delete-btn:hover {
   background-color: lightcoral;
   cursor: pointer;
 } 
+
+tbody tr:hover {
+  background-color: rgb(238, 170, 170);
+}
 
 @media only screen and (min-width: 990px) {
   .container {

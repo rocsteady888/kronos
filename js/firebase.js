@@ -20,7 +20,6 @@ const txtLastName = document.getElementById('txtLastName');
 const btnLogIn = document.getElementById('btnLogIn');
 const btnRegister = document.getElementById('btnRegister');
 const btnLogOut = document.getElementById('btnLogOut');
-const tableRowBtn = document.getElementsByClassName('tableRow');
 let dateIn;
 let timeIn;
 let endTime;
@@ -179,22 +178,18 @@ timeCardQuery.addEventListener('click', e => {
   }
 });
 
-function recentActivity() {
-
-  dbRefObject.child('time stamp').limitToLast(5).orderByChild("time").on("child_added", function (snapshot) {
-    const sv = snapshot.val();
-    id = snapshot.key;
-    dateOf = sv.date;
-    timeIn = sv.clockin;
-    timeOut = sv.clockout;
-    duration = parseFloat(sv.duration).toFixed(1);
-    totalHours.push(duration);
-    createTable();
-  }, function (errorObject) {
-    console.log("Errors handled: " + errorObject.code);
-  });
-
-}
+dbRefObject.child('time stamp').limitToLast(5).orderByChild("time").on("child_added", function (snapshot) {
+  const sv = snapshot.val();
+  id = snapshot.key;
+  dateOf = sv.date;
+  timeIn = sv.clockin;
+  timeOut = sv.clockout;
+  duration = parseFloat(sv.duration).toFixed(1);
+  totalHours.push(duration);
+  createTable();
+}, function (errorObject) {
+  console.log("Errors handled: " + errorObject.code);
+});
 
 dbRefObject.child('time stamp').on("child_removed", function(snapshot) {
   const sv = snapshot.val();
@@ -208,9 +203,9 @@ dbRefObject.child('time stamp').on("child_changed", function(snapshot) {
 });
 
 function createTable(){
-  let dateTR = $("<tr class='tableRow modal-trigger delete-btn' data-target='modal2'>");
+  let dateTR = $("<tr class='tableRow'>");
   dateTR.attr('id', id).attr('data-id', id);
-  let dateTD =$("<td>").text(dateOf);
+  let dateTD = $("<td class='delete-btn modal-trigger' data-target='modal2'>").text(dateOf);
   let clockInTD =$("<td>").text(timeIn);
   let clockoutTD;
   if ( timeOut === '12hour' ) {
@@ -229,7 +224,7 @@ function createTable(){
 }
 
 
-$("tbody").on("click", ".delete-btn", function () {
+$("tbody").on("click", "td.delete-btn", function () {
   let itemToDelete = $(this).data('id');
   console.log(itemToDelete);
   $("#modal2").on("click", "a#modal-delete-btn", function () {
@@ -244,6 +239,5 @@ $("tbody").on("click", ".delete-btn", function () {
       });
   });
 });
-
 
 //fin
