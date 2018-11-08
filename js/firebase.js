@@ -204,8 +204,8 @@ dbRefObject.child('time stamp').on("child_changed", function(snapshot) {
 
 function createTable(){
   let dateTR = $("<tr class='tableRow'>");
-  dateTR.attr('id', id).attr('data-id', id);
-  let dateTD = $("<td class='delete-btn modal-trigger' data-target='modal2'>").text(dateOf);
+  dateTR.attr('id', id);
+  let dateTD = $("<td class='delete-btn modal-trigger' data-target='modal2'>").attr('data-id', id).text(dateOf);
   let clockInTD =$("<td>").text(timeIn);
   let clockoutTD;
   if ( timeOut === '12hour' ) {
