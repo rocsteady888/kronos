@@ -20,6 +20,7 @@ const txtLastName = document.getElementById('txtLastName');
 const btnLogIn = document.getElementById('btnLogIn');
 const btnRegister = document.getElementById('btnRegister');
 const btnLogOut = document.getElementById('btnLogOut');
+const loggedInAs = document.getElementById('loggedInAs');
 let dateIn;
 let timeIn;
 let endTime;
@@ -45,21 +46,24 @@ btnRegister.addEventListener('click', e => {
   const email = txtEmail.value;
   const password = txtPassword.value;
   const auth = firebase.auth();
-  //sign in
   const promise = auth.createUserWithEmailAndPassword(email, password);
   promise.catch(e => console.log(e.message));
 });
 
 btnLogOut.addEventListener('click', e=> {
+  btnLogIn.classList.remove('hide');
+  ("#timeCard").empty();
   firebase.auth().signOut();
 });
 
-firebase.auth().onAuthStateChanged(firebaseUser => {
-  if(firebaseUser){
-    // console.log(firebaseUser);
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    btnLogIn.classList.add('hide');
+    loggedInAs.classList.remove('hide');
     btnLogOut.classList.remove('hide');
   } else {
     console.log('not logged in');
+    LoggedInAs.classList.add('hide').text(" ");
     btnLogOut.classList.add('hide');
   }
 });
@@ -232,10 +236,10 @@ $("tbody").on("click", "td.delete-btn", function () {
     console.log(itemToDelete);
     dbRefObject.child('time stamp/' + itemToDelete).remove()
       .then(function () {
-        console.log("Remove succeeded.")
+        console.log("Remove succeeded.");
       })
       .catch(function (error) {
-        console.log("Remove failed: " + error.message)
+        console.log("Remove failed: " + error.message);
       });
   });
 });

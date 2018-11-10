@@ -30,7 +30,8 @@
       <a href="#!" class="brand-logo">Kronos</a>
       <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
-        <li><a class="modal-trigger" href="#modal1">Log In</a></li>
+        <li><a class="modal-trigger" href="#modal1" id="btnLogIn">Log In</a></li>
+        <li class="hide" id="loggedInAs"></li>
         <li><a class="hide" id="btnLogOut">Log Out</a></li>
         <li><a class="hide" id="btnRegister">Register</a></li>
       </ul>
@@ -38,7 +39,7 @@
   </nav>
   
   <ul class="sidenav" id="mobile-demo">
-    <li><a class="modal-trigger hide" href="#modal1">Log In</a></li>
+    <li><a class="modal-trigger hide" href="#modal1" id="btnLogIn">Log In</a></li>
     <li><a class="hide" id="btnLogOut">Log Out</a></li>
   </ul>
   <div class="container">
@@ -54,8 +55,6 @@
             <a href="tel:+19192452001,10606#,,4182#,,1" class="btn-large waves-effect waves-light orange" id="clockInTwelve">Clock In (12)</a>
           </div>
           <div class="col s12 m6 l12">
-            <a class="btn-large waves-effect waves-light red lighten-1 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Only places the call, does not add a time stamp!"
-              href="tel:+19192452001,10606#,,,4182#,,,,,1" id="teletime">Call Teletime</a>
             <input type="text" class="datepicker" id="searchDate">
             <a class="btn-large waves-effect waves-light teal darken-1" id="timeCardQuery">Time Card</a>
           </div>

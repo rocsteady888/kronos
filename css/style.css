@@ -39,7 +39,7 @@ tbody .delete-btn:hover {
   cursor: pointer;
 } 
 
-tbody tr:hover {
+.tableRow:hover {
   background-color: rgb(238, 170, 170);
 }
 
