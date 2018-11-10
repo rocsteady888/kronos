@@ -21,6 +21,7 @@ const btnLogIn = document.getElementById('btnLogIn');
 const btnRegister = document.getElementById('btnRegister');
 const btnLogOut = document.getElementById('btnLogOut');
 const loggedInAs = document.getElementById('loggedInAs');
+const navLoginBtn = document.getElementById('navLoginBtn');
 let uid;
 let itemToDelete;
 let dateIn;
@@ -62,9 +63,9 @@ firebase.auth().onAuthStateChanged(function(user) {
     let email = (JSON.stringify(user.email));
     let uid = (JSON.stringify(user.uid));
     getRecentTimeStamps(uid);
-    btnLogIn.classList.add('hide');
+    navLoginBtn.classList.add('hide');
     loggedInAs.classList.remove('hide');
-    $("#loggedInAs").text(email);
+    $("#loggedInAs").text("User: " + email);
     btnLogOut.classList.remove('hide');
     dbRefObject.child(uid + '/time stamp').on("child_removed", function(snapshot) {
       const sv = snapshot.val();
@@ -77,6 +78,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     });
   } else {
     console.log('not logged in');
+    navLoginBtn.classList.remove('hide');
     loggedInAs.classList.add('hide');
     btnLogOut.classList.add('hide');
   }
