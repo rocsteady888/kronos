@@ -31,14 +31,22 @@
       <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
         <li><a class="modal-trigger" href="#modal1" id="navLoginBtn">Log In</a></li>
-        <li class="hide" id="loggedInAs"></li>
         <li><a class="hide" id="btnLogOut">Log Out</a></li>
         <li><a class="hide" id="btnRegister">Register</a></li>
       </ul>
     </div>
   </nav>
+  
+  <ul class="sidenav" id="mobile-demo">
+    <li><a class="modal-trigger" href="#modal1" id="navLoginBtn">Log In</a></li>
+    <li><a class="hide" id="btnLogOut">Log Out</a></li>
+    <li><a class="hide" id="btnRegister">Register</a></li>
+  </ul>
   <div class="container">
-    <h2 class="header center orange-text">Time Keeping App</h2>
+    <div>
+      <h2 class="header center orange-text">Time Keeping App</h2>
+      <h5 class="center-align" id="loggedInAs">This should be center aligned</h5>
+    </div>
     <div class="row">
       <!-- Time Stamp Buttons -->
       <div class="col s12 l3 call-btns">
@@ -110,7 +118,7 @@
       </div>
     </div>
     <!-- Register Modal Structure -->
-    <div id="logInModal" class="modal">
+    <div id="registerModal" class="modal">
       <div class="modal-content">
         <form class="col s12">
           <div class="row">
@@ -122,6 +130,14 @@
               <input placeholder="Last Name" id="txtLastName" type="text" class="validate">
               <label for="last_name">Last Name</label>
             </div>
+            <div class="input-field col s6">
+              <label for="kronos_uid">Kronos User ID</label>
+              <input placeholder="Kronos User ID" id="kronosUid" type="text">
+            </div>
+            <div class="input-field col s6">
+                <label for="kronos_passcode">Kronos Passcode</label>
+                <input placeholder="Kronos Passcode" id="kronosPasscode" type="text">
+              </div>
           </div>
           <div class="row">
             <div class="input-field col s12">

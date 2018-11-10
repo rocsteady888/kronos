@@ -64,8 +64,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     let uid = (JSON.stringify(user.uid));
     getRecentTimeStamps(uid);
     navLoginBtn.classList.add('hide');
-    loggedInAs.classList.remove('hide');
-    $("#loggedInAs").text("User: " + email);
+    $(loggedInAs).text("User: " + email);
     btnLogOut.classList.remove('hide');
     dbRefObject.child(uid + '/time stamp').on("child_removed", function(snapshot) {
       const sv = snapshot.val();
@@ -76,10 +75,11 @@ firebase.auth().onAuthStateChanged(function(user) {
       const sv = snapshot.val();
       id = snapshot.key;
     });
+    console.log("logged in as " + email)
   } else {
     console.log('not logged in');
+    $(loggedInAs).text("Log in to view timecard");
     navLoginBtn.classList.remove('hide');
-    loggedInAs.classList.add('hide');
     btnLogOut.classList.add('hide');
   }
 });
