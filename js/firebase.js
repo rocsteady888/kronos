@@ -21,6 +21,8 @@ const btnLogIn = document.getElementById('btnLogIn');
 const btnRegister = document.getElementById('btnRegister');
 const btnLogOut = document.getElementById('btnLogOut');
 const loggedInAs = document.getElementById('loggedInAs');
+let uid;
+let itemToDelete;
 let dateIn;
 let timeIn;
 let endTime;
@@ -32,7 +34,6 @@ let totalHours = [];
 //Add Login
 btnLogIn.addEventListener('click', e => {
   //get email and password
-  console.log('clicked');
   const email = txtEmail.value;
   const password = txtPassword.value;
   const auth = firebase.auth();
@@ -52,18 +53,31 @@ btnRegister.addEventListener('click', e => {
 
 btnLogOut.addEventListener('click', e=> {
   btnLogIn.classList.remove('hide');
-  ("#timeCard").empty();
+  $("#timeCard").empty();
   firebase.auth().signOut();
 });
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
+    let email = (JSON.stringify(user.email));
+    let uid = (JSON.stringify(user.uid));
+    getRecentTimeStamps(uid);
     btnLogIn.classList.add('hide');
     loggedInAs.classList.remove('hide');
+    $("#loggedInAs").text(email);
     btnLogOut.classList.remove('hide');
+    dbRefObject.child(uid + '/time stamp').on("child_removed", function(snapshot) {
+      const sv = snapshot.val();
+      id = snapshot.key;
+      $("#" + id).remove();
+    });
+    dbRefObject.child(uid + '/time stamp').on("child_changed", function(snapshot) {
+      const sv = snapshot.val();
+      id = snapshot.key;
+    });
   } else {
     console.log('not logged in');
-    LoggedInAs.classList.add('hide').text(" ");
+    loggedInAs.classList.add('hide');
     btnLogOut.classList.add('hide');
   }
 });
@@ -78,7 +92,8 @@ clockInTwentyFour.addEventListener('click', e => {
           .duration(moment(clockout, 'h:mm:ss a')
           .diff(moment(currentTime, 'h:mm:ss a'))
         ).asHours().toFixed(1);
-  dbRefObject.child('time stamp').push({
+  let uid = JSON.stringify(firebase.auth().currentUser.uid);
+  dbRefObject.child(uid + '/time stamp').push({
     time: n,
     date: currentDate,
     clockin: currentTime,
@@ -97,7 +112,9 @@ clockOutTwentyFour.addEventListener('click', e => {
           .duration(moment(currentTime, 'h:mm:ss a')
           .diff(moment(clockin, 'h:mm:ss a'))
         ).asHours().toFixed(1);
-  dbRefObject.child('time stamp').push({
+  let user = firebase.auth().currentUser;
+  let uid = JSON.stringify(user.uid);
+  dbRefObject.child(uid + '/time stamp').push({
     time: n,
     date: currentDate,
     clockin: clockin,
@@ -112,7 +129,8 @@ clockInTwelve.addEventListener('click', e => {
   let currentDate = moment().format('MMMM Do YYYY');
   let currentTime = moment().format('h:mm:ss a');
   let clockout = '12hour';
-  dbRefObject.child('time stamp').push({
+  let uid = JSON.stringify(firebase.auth().currentUser.uid);
+  dbRefObject.child(uid + '/time stamp').push({
     time: n,
     date: currentDate,
     clockin: currentTime,
@@ -122,8 +140,9 @@ clockInTwelve.addEventListener('click', e => {
 });
 
 $(document).on('click','#clockOutTwelve',function(e){
+  let uid = JSON.stringify(firebase.auth().currentUser.uid);
   let id = $(this).data('id');
-  let dateToUpdate = dbRefObject.child('time stamp/' + id);
+  let dateToUpdate = dbRefObject.child(uid + '/time stamp/' + id);
   let sv;
   let clockin;
   dateToUpdate.on('value', function(snapshot) {
@@ -146,8 +165,8 @@ $(document).on('click','#clockOutTwelve',function(e){
     duration: duration,
     time: sv.time
   };
-  var updates = {};
-  updates['/time stamp/' + id] = postData;
+  let updates = {};
+  updates[uid + '/time stamp/' + id] = postData;
 
   return firebase.database().ref().update(updates);
 });
@@ -163,7 +182,7 @@ timeCardQuery.addEventListener('click', e => {
     let payPeriodStart = Date.parse(searchDate);
     // 1209600000 is the number of milliseconds in 2 weeks
     let payPeriodEnd = payPeriodStart + 1209600000;
-    let query = dbRefObject.child('time stamp').orderByChild('time').startAt(payPeriodStart).endAt(payPeriodEnd);
+    let query = dbRefObject.child(uid + '/time stamp').orderByChild('time').startAt(payPeriodStart).endAt(payPeriodEnd);
     query.on('child_added', function(snapshot) {
       let timeStampQuery = snapshot.val();
       const sv = snapshot.val();
@@ -182,29 +201,22 @@ timeCardQuery.addEventListener('click', e => {
   }
 });
 
-dbRefObject.child('time stamp').limitToLast(5).orderByChild("time").on("child_added", function (snapshot) {
-  const sv = snapshot.val();
-  id = snapshot.key;
-  dateOf = sv.date;
-  timeIn = sv.clockin;
-  timeOut = sv.clockout;
-  duration = parseFloat(sv.duration).toFixed(1);
-  totalHours.push(duration);
-  createTable();
-}, function (errorObject) {
-  console.log("Errors handled: " + errorObject.code);
-});
 
-dbRefObject.child('time stamp').on("child_removed", function(snapshot) {
-  const sv = snapshot.val();
-  id = snapshot.key;
-  $("#" + id).remove();
-});
+function getRecentTimeStamps(uid) {
+  dbRefObject.child(uid + '/time stamp').limitToLast(5).orderByChild("time").on("child_added", function (snapshot) {
+    const sv = snapshot.val();
+    id = snapshot.key;
+    dateOf = sv.date;
+    timeIn = sv.clockin;
+    timeOut = sv.clockout;
+    duration = parseFloat(sv.duration).toFixed(1);
+    totalHours.push(duration);
+    createTable();
+  }, function (errorObject) {
+    console.log("Errors handled: " + errorObject.code);
+  });
+}
 
-dbRefObject.child('time stamp').on("child_changed", function(snapshot) {
-  const sv = snapshot.val();
-  id = snapshot.key;
-});
 
 function createTable(){
   let dateTR = $("<tr class='tableRow'>");
@@ -229,12 +241,13 @@ function createTable(){
 
 
 $("tbody").on("click", "td.delete-btn", function () {
-  let itemToDelete = $(this).data('id');
+  itemToDelete = $(this).data('id');
   console.log(itemToDelete);
   $("#modal2").on("click", "a#modal-delete-btn", function () {
 
     console.log(itemToDelete);
-    dbRefObject.child('time stamp/' + itemToDelete).remove()
+    let uid = JSON.stringify(firebase.auth().currentUser.uid);
+    dbRefObject.child(uid + '/time stamp/' + itemToDelete).remove()
       .then(function () {
         console.log("Remove succeeded.");
       })

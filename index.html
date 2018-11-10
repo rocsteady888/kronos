@@ -30,7 +30,7 @@
       <a href="#!" class="brand-logo">Kronos</a>
       <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
-        <li><a class="modal-trigger" href="#modal1" id="btnLogIn">Log In</a></li>
+        <li><a class="modal-trigger" href="#modal1">Log In</a></li>
         <li class="hide" id="loggedInAs"></li>
         <li><a class="hide" id="btnLogOut">Log Out</a></li>
         <li><a class="hide" id="btnRegister">Register</a></li>
@@ -39,7 +39,7 @@
   </nav>
   
   <ul class="sidenav" id="mobile-demo">
-    <li><a class="modal-trigger hide" href="#modal1" id="btnLogIn">Log In</a></li>
+    <li><a class="modal-trigger hide" href="#modal1">Log In</a></li>
     <li><a class="hide" id="btnLogOut">Log Out</a></li>
   </ul>
   <div class="container">
@@ -92,21 +92,22 @@
       </div>
     </div>
   </div>
-  <!-- Log In Modal Structure -->
+  <!-- Modals -->
   <div class="row">
+    <!-- Log In Modal Structure -->
     <div id="modal1" class="modal">
       <div class="modal-content">
         <form class="col s6">
           <div class="row">
             <div class="input-field col s12">
-              <input id="txtEmail" type="email" class="validate">
               <label for="email">Email</label>
+              <input id="txtEmail" type="email" class="validate">
             </div>
           </div>
           <div class="row">
             <div class="input-field col s12">
-              <input id="txtPassword" type="password" class="validate">
               <label for="password">Password</label>
+              <input id="txtPassword" type="password" class="validate">
             </div>
             <a class="modal-action modal-close btn-large waves-effect waves-light blue" id="btnLogIn">Log In</a>
           </div>
