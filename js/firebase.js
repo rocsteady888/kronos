@@ -146,7 +146,7 @@ $(document).on('click','#clockOutTwelve',function(e){
   let dateToUpdate = dbRefObject.child(uid + '/time stamp/' + id);
   let sv;
   let clockin;
-  dateToUpdate.on('value', function(snapshot) {
+  dateToUpdate.once('value', function(snapshot) {
     sv = snapshot.val();
     clockin = sv.clockin
   });
