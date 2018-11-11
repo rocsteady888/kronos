@@ -27,25 +27,18 @@
 
   <nav>
     <div class="nav-wrapper blue">
-      <a href="#!" class="brand-logo">Kronos</a>
-      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-      <ul class="right hide-on-med-and-down">
+      <a class="brand-logo left">Kronos</a>
+      <ul class="right">
         <li><a class="modal-trigger" href="#modal1" id="navLoginBtn">Log In</a></li>
         <li><a class="hide" id="btnLogOut">Log Out</a></li>
-        <li><a class="hide" id="btnRegister">Register</a></li>
+        <li><a class="modal-trigger" href="#registerModal" id="btnRegister">Register</a></li>
       </ul>
     </div>
   </nav>
-  
-  <ul class="sidenav" id="mobile-demo">
-    <li><a class="modal-trigger" href="#modal1" id="navLoginBtn">Log In</a></li>
-    <li><a class="hide" id="btnLogOut">Log Out</a></li>
-    <li><a class="hide" id="btnRegister">Register</a></li>
-  </ul>
   <div class="container">
     <div>
       <h2 class="header center orange-text">Time Keeping App</h2>
-      <h5 class="center-align" id="loggedInAs">This should be center aligned</h5>
+      <h5 class="center-align" id="loggedInAs"></h5>
     </div>
     <div class="row">
       <!-- Time Stamp Buttons -->
@@ -58,7 +51,7 @@
             <a href="tel:+19192452001,10606#,,4182#,,1" class="btn-large waves-effect waves-light hoverable orange" id="clockInTwelve">Clock In (12)</a>
           </div>
           <div class="col s12 m6 l12">
-            <input type="text" class="datepicker" id="searchDate" placeholder="Select Start Date">
+            <input type="text" class="datepicker" id="searchDate" placeholder="Select Pay Period Start Date">
             <a class="btn-large waves-effect waves-light teal darken-1" id="timeCardQuery">Time Card</a>
           </div>
         </div>
@@ -84,17 +77,6 @@
     </div>
   </div>
 
-  <!-- Delete Modal Structure -->
-  <div class="row">
-    <div id="modal2" class="modal">
-      <div class="modal-content">
-        <p>Are you sure you want to delete this?</p>
-      </div>
-      <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-red btn delete-btn red" id="modal-delete-btn">Delete</a>
-      </div>
-    </div>
-  </div>
   <!-- Modals -->
   <div class="row">
     <!-- Log In Modal Structure -->
@@ -123,12 +105,12 @@
         <form class="col s12">
           <div class="row">
             <div class="input-field col s6">
-              <input placeholder="First Name" id="txtFirstName" type="text" class="validate">
               <label for="first_name">First Name</label>
+              <input placeholder="First Name" id="txtFirstName" type="text" class="validate">
             </div>
             <div class="input-field col s6">
-              <input placeholder="Last Name" id="txtLastName" type="text" class="validate">
               <label for="last_name">Last Name</label>
+              <input placeholder="Last Name" id="txtLastName" type="text" class="validate">
             </div>
             <div class="input-field col s6">
               <label for="kronos_uid">Kronos User ID</label>
@@ -141,17 +123,28 @@
           </div>
           <div class="row">
             <div class="input-field col s12">
-              <input id="txtPassword" type="password" class="validate">
-              <label for="password">Password</label>
+              <label for="email">Email</label>
+              <input id="txtEmail" type="email" class="validate">
             </div>
           </div>
           <div class="row">
             <div class="input-field col s12">
-              <input id="txtEmail" type="email" class="validate">
-              <label for="email">Email</label>
+              <label for="password">Password</label>
+              <input id="txtPassword" type="password" class="validate">
             </div>
           </div>
         </form>
+      </div>
+    </div>
+    <!-- Delete Modal Structure -->
+    <div class="row">
+      <div id="modal2" class="modal">
+        <div class="modal-content">
+          <p>Are you sure you want to delete this?</p>
+        </div>
+        <div class="modal-footer">
+          <a href="#!" class="modal-close waves-effect waves-red btn delete-btn red" id="modal-delete-btn">Delete</a>
+        </div>
       </div>
     </div>
   </div>
