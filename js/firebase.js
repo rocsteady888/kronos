@@ -60,12 +60,15 @@ btnLogOut.addEventListener('click', e=> {
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
-    let email = (JSON.stringify(user.email));
-    let uid = (JSON.stringify(user.uid));
+    let emailstr = (JSON.stringify(user.email));
+    let uidstr = (JSON.stringify(user.uid));
+    email = JSON.parse(emailstr.replace(/""/));
+    uid = JSON.parse(uidstr.replace(/""/));
     getRecentTimeStamps(uid);
     navLoginBtn.classList.add('hide');
     $(loggedInAs).text("User: " + email);
     btnLogOut.classList.remove('hide');
+    console.log("logged in as " + emailstr)
     dbRefObject.child(uid + '/time stamp').on("child_removed", function(snapshot) {
       const sv = snapshot.val();
       id = snapshot.key;
@@ -75,7 +78,6 @@ firebase.auth().onAuthStateChanged(function(user) {
       const sv = snapshot.val();
       id = snapshot.key;
     });
-    console.log("logged in as " + email)
   } else {
     console.log('not logged in');
     $(loggedInAs).text("Log in to view timecard");
@@ -94,7 +96,6 @@ clockInTwentyFour.addEventListener('click', e => {
           .duration(moment(clockout, 'h:mm:ss a')
           .diff(moment(currentTime, 'h:mm:ss a'))
         ).asHours().toFixed(1);
-  let uid = JSON.stringify(firebase.auth().currentUser.uid);
   dbRefObject.child(uid + '/time stamp').push({
     time: n,
     date: currentDate,
@@ -114,8 +115,6 @@ clockOutTwentyFour.addEventListener('click', e => {
           .duration(moment(currentTime, 'h:mm:ss a')
           .diff(moment(clockin, 'h:mm:ss a'))
         ).asHours().toFixed(1);
-  let user = firebase.auth().currentUser;
-  let uid = JSON.stringify(user.uid);
   dbRefObject.child(uid + '/time stamp').push({
     time: n,
     date: currentDate,
@@ -131,7 +130,6 @@ clockInTwelve.addEventListener('click', e => {
   let currentDate = moment().format('MMMM Do YYYY');
   let currentTime = moment().format('h:mm:ss a');
   let clockout = '12hour';
-  let uid = JSON.stringify(firebase.auth().currentUser.uid);
   dbRefObject.child(uid + '/time stamp').push({
     time: n,
     date: currentDate,
@@ -142,7 +140,6 @@ clockInTwelve.addEventListener('click', e => {
 });
 
 $(document).on('click','#clockOutTwelve',function(e){
-  let uid = JSON.stringify(firebase.auth().currentUser.uid);
   let id = $(this).data('id');
   let dateToUpdate = dbRefObject.child(uid + '/time stamp/' + id);
   let sv;
@@ -151,7 +148,6 @@ $(document).on('click','#clockOutTwelve',function(e){
     sv = snapshot.val();
     clockin = sv.clockin
   });
-  
   let d = new Date();
   let n = d.getTime();
   let currentDate = moment().format('MMMM Do YYYY');
@@ -167,9 +163,9 @@ $(document).on('click','#clockOutTwelve',function(e){
     duration: duration,
     time: sv.time
   };
+  $( ".clockOutTwelveBtn" ).replaceWith( "<td>" + currentTime + "</td>" );
   let updates = {};
   updates[uid + '/time stamp/' + id] = postData;
-
   return firebase.database().ref().update(updates);
 });
 
@@ -184,7 +180,7 @@ timeCardQuery.addEventListener('click', e => {
     let payPeriodStart = Date.parse(searchDate);
     // 1209600000 is the number of milliseconds in 2 weeks
     let payPeriodEnd = payPeriodStart + 1209600000;
-    let query = dbRefObject.child(uid + '/time stamp').orderByChild('time').startAt(payPeriodStart).endAt(payPeriodEnd);
+    let query = dbRefObject.child('/' + uid + '/time stamp').orderByChild('time').startAt(payPeriodStart).endAt(payPeriodEnd);
     query.on('child_added', function(snapshot) {
       let timeStampQuery = snapshot.val();
       const sv = snapshot.val();
@@ -221,13 +217,13 @@ function getRecentTimeStamps(uid) {
 
 
 function createTable(){
-  let dateTR = $("<tr class='tableRow'>");
+  let dateTR = $("<tr class='tableRow hoverable'>");
   dateTR.attr('id', id);
   let dateTD = $("<td class='delete-btn modal-trigger' data-target='modal2'>").attr('data-id', id).text(dateOf);
   let clockInTD =$("<td>").text(timeIn);
   let clockoutTD;
   if ( timeOut === '12hour' ) {
-    clockOutTD = $("<a>").attr('href', 'tel:+19192452001,10606#,,4182#,,1').attr('class', 'btn-large waves-effect waves-light orange').attr('id', 'clockOutTwelve').attr('data-id', id).text("Clock Out");
+    clockOutTD = $("<a>").attr('href', 'tel:+19192452001,10606#,,4182#,,1').attr('class', 'btn-large waves-effect waves-light clockOutTwelveBtn orange').attr('id', 'clockOutTwelve').attr('data-id', id).text("Clock Out");
   } else {
     clockOutTD = $("<td>").text(timeOut);
   }
@@ -246,9 +242,7 @@ $("tbody").on("click", "td.delete-btn", function () {
   itemToDelete = $(this).data('id');
   console.log(itemToDelete);
   $("#modal2").on("click", "a#modal-delete-btn", function () {
-
     console.log(itemToDelete);
-    let uid = JSON.stringify(firebase.auth().currentUser.uid);
     dbRefObject.child(uid + '/time stamp/' + itemToDelete).remove()
       .then(function () {
         console.log("Remove succeeded.");

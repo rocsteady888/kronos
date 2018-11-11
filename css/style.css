@@ -39,10 +39,6 @@ tbody .delete-btn:hover {
   cursor: pointer;
 } 
 
-.tableRow:hover {
-  background-color: rgb(238, 170, 170);
-}
-
 @media only screen and (min-width: 990px) {
   .container {
     width: 85%;
