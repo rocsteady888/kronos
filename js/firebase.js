@@ -69,7 +69,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     navLoginBtn.classList.add('hide');
     btnRegister.classList.add('hide');
     btnLogOut.classList.remove('hide');
-    console.log("logged in as " + emailstr)
+    console.log("logged in as " + email)
     dbRefObject.child(uid + '/time stamp').on("child_removed", function(snapshot) {
       const sv = snapshot.val();
       id = snapshot.key;
@@ -98,6 +98,7 @@ clockInTwentyFour.addEventListener('click', e => {
           .duration(moment(clockout, 'h:mm:ss a')
           .diff(moment(currentTime, 'h:mm:ss a'))
         ).asHours().toFixed(1);
+  let uid = JSON.parse(JSON.stringify(firebase.auth().currentUser.uid).replace(/""/));        
   dbRefObject.child(uid + '/time stamp').push({
     time: n,
     date: currentDate,
@@ -117,6 +118,7 @@ clockOutTwentyFour.addEventListener('click', e => {
           .duration(moment(currentTime, 'h:mm:ss a')
           .diff(moment(clockin, 'h:mm:ss a'))
         ).asHours().toFixed(1);
+  let uid = JSON.parse(JSON.stringify(firebase.auth().currentUser.uid).replace(/""/));
   dbRefObject.child(uid + '/time stamp').push({
     time: n,
     date: currentDate,
@@ -132,6 +134,7 @@ clockInTwelve.addEventListener('click', e => {
   let currentDate = moment().format('MMMM Do YYYY');
   let currentTime = moment().format('h:mm:ss a');
   let clockout = '12hour';
+  let uid = JSON.parse(JSON.stringify(firebase.auth().currentUser.uid).replace(/""/));
   dbRefObject.child(uid + '/time stamp').push({
     time: n,
     date: currentDate,
@@ -143,6 +146,7 @@ clockInTwelve.addEventListener('click', e => {
 
 $(document).on('click','#clockOutTwelve',function(e){
   let id = $(this).data('id');
+  let uid = JSON.parse(JSON.stringify(firebase.auth().currentUser.uid).replace(/""/));
   let dateToUpdate = dbRefObject.child(uid + '/time stamp/' + id);
   let sv;
   let clockin;
@@ -182,6 +186,7 @@ timeCardQuery.addEventListener('click', e => {
     let payPeriodStart = Date.parse(searchDate);
     // 1209600000 is the number of milliseconds in 2 weeks
     let payPeriodEnd = payPeriodStart + 1209600000;
+    let uid = JSON.parse(JSON.stringify(firebase.auth().currentUser.uid).replace(/""/));
     let query = dbRefObject.child('/' + uid + '/time stamp').orderByChild('time').startAt(payPeriodStart).endAt(payPeriodEnd);
     query.on('child_added', function(snapshot) {
       let timeStampQuery = snapshot.val();
